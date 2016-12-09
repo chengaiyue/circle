@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+</head>
+<style>
+ul {
+	padding: 0;
+	margin: 0;
+	list-style: none;	
+}
+.wrap {
+	width: 300px;
+	height: 300px;
+	perspective: 33000px;
+	margin: 30px auto;
+	overflow: hidden;
+	border: 10px solid green;	
+}
+.img {
+	width: 300px;
+	height: 300px;
+	transform-style: preserve-3d;
+	transform-origin: center center -259.81px;	
+	position: relative;
+	transition: 1s;
+}
+.img li {
+	position: absolute;
+	left: 0;
+	top: 0;
+	transform-origin: center center -259.81px;	
+}
+img {
+	width: 300px;
+	height: 300px;
+	vertical-align: top;	
+}
+.prev {
+	background: yellowgreen;
+	font: 14px/20px "微软雅黑";
+	position: absolute;
+	left: 30%;
+	top: 180px;	
+}
+.next {
+	background: yellowgreen;
+	font: 14px/20px "微软雅黑";
+	position: absolute;
+	right: 30%;
+	top: 180px;	
+}
+.btn {
+	width: 100%;
+	text-align: center;	
+}
+.btn input {
+	width: 30px;
+	height: 30px;
+	background: yellowgreen;	
+}
+.btn .active {
+	background: green;	
+}
+</style>
+<script src="miaov.js"></script>
+<script>
+window.onload = function () {
+	var prev = document.querySelector('.prev');
+	var next = document.querySelector('.next');
+	var img = document.querySelector('.img');
+	var li = document.querySelectorAll('li');	
+	var inputs = document.querySelectorAll('.btn>input');
+	
+	var now = 0;
+	for ( var i = 0; i < li.length; i++ ) {
+		li[i].style.transform = 'rotateY('+(-i*60)+'deg)';//将图片旋转
+		inputs[i].index = i;
+		inputs[i].onclick = function () {
+			var show = now % inputs.length;//找到当前是第几张
+			show = show < 0 ? show + inputs.length : show;//如果小于零 则加上图片的长度
+			if ( show == this.index ) {//如果是同一张则 return掉
+				return;
+			}
+			var dis = this.index - show;//如果不是同一张 则找到当前点击和当前显示的相差几张
+			now = this.index;//然后当前显示的是点击的这一章
+			for ( var j = 0; j < inputs.length; j++ ) {
+				inputs[j].className = '';
+			}
+			this.className = 'active';
+			img.style.transform = 'rotateY('+ (-now * 60) +'deg)';
+		};	
+	}
+	prev.onclick = function () {
+		now--;
+		var deg = - now * 60;
+		img.style.transform = 'rotateY('+ deg +'deg)';
+		var show = now % inputs.length;
+		show = show < 0 ? show + inputs.length : show;
+		for ( var i = 0; i < inputs.length; i++ ) {
+			inputs[i].className = '';
+		}
+		inputs[show].className = 'active';
+	};
+	next.onclick = function () {
+		now++;
+		var deg = - now * 60;
+		img.style.transform = 'rotateY('+ deg +'deg)';
+		var show = now % inputs.length;
+		show = show < 0 ? show + inputs.length : show;
+		for ( var i = 0; i < inputs.length; i++ ) {
+			inputs[i].className = '';
+		}
+		inputs[show].className = 'active';
+	};	
+	
+};
+</script>
+<body>
+<input type="button" value="上一张" class="prev">
+<input type="button" value="下一张" class="next">
+<div class="wrap">
+    <ul class="img">
+        <li><img src="img/1.jpg"></li>
+        <li><img src="img/2.jpg"></li>
+        <li><img src="img/3.jpg"></li>
+        <li><img src="img/4.jpg"></li>
+        <li><img src="img/5.jpg"></li>
+        <li><img src="img/6.jpg"></li>
+    </ul>
+</div>
+<div class="btn">
+    <input type="button" value="0" class="active">
+    <input type="button" value="1">
+    <input type="button" value="2">
+    <input type="button" value="3">
+    <input type="button" value="4">
+    <input type="button" value="5">
+</div>
+</body>
+</html>
